@@ -4,6 +4,9 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
+// Forçar renderização dinâmica
+export const dynamic = 'force-dynamic';
+
 interface User {
   id: string;
   email: string;
@@ -97,19 +100,19 @@ export default function UsersPage() {
   };
 
   const getStatusBadge = (status: string) => {
-    const styles = {
+    const styles: Record<string, string> = {
       free: 'bg-gray-100 text-gray-700',
       pending: 'bg-yellow-100 text-yellow-700',
       pro: 'bg-green-100 text-green-700',
     };
-    const labels = {
+    const labels: Record<string, string> = {
       free: 'Free',
       pending: 'Pendente',
       pro: 'Pró',
     };
     return (
-      <span className={`px-2 py-1 rounded-full text-xs font-medium ${styles[status as keyof typeof styles]}`}>
-        {labels[status as keyof typeof labels]}
+      <span className={`px-2 py-1 rounded-full text-xs font-medium ${styles[status]}`}>
+        {labels[status]}
       </span>
     );
   };
@@ -117,14 +120,13 @@ export default function UsersPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-800"></div>
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
       <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center gap-4">
@@ -137,14 +139,13 @@ export default function UsersPage() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 py-8">
-        {/* Filters */}
         <div className="bg-white rounded-xl p-4 shadow-sm mb-6 flex flex-wrap gap-4 items-center">
           <input
             type="text"
             placeholder="Buscar por email ou nome..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="flex-1 min-w-[200px] px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none text-gray-900"
+            className="flex-1 min-w-[200px] px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-gray-900"
           />
           <div className="flex gap-2">
             {(['all', 'free', 'pending', 'pro'] as const).map((f) => (
@@ -153,7 +154,7 @@ export default function UsersPage() {
                 onClick={() => setFilter(f)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
                   filter === f
-                    ? 'bg-primary text-white'
+                    ? 'bg-blue-800 text-white'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
@@ -163,7 +164,6 @@ export default function UsersPage() {
           </div>
         </div>
 
-        {/* Users Table */}
         <div className="bg-white rounded-xl shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -260,7 +260,6 @@ export default function UsersPage() {
         </div>
       </main>
 
-      {/* Footer */}
       <footer className="text-center py-4 text-sm text-gray-400">
         Criado por KaiqueDev
       </footer>
